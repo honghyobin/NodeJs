@@ -1,78 +1,49 @@
-const express=require('express')
+const express=require('express');
+const cookieParser=require('cookie-parser');
 const app=express();
-const path = require('path')
 
-app.use("/html2",express.static(path.join(__dirname,"html")));
-
-// //미들웨어 함수
-// const middle1=(req,res,next)=>{
-//     console.log("미들웨어 실행");
-
-//     //다음 미들웨어 또는 라우트 핸들러로 제어를 전달달
-//     next();
-// };
-
-//미들웨어 함수 모듈에서 가지고 오기
-const middle1=require("./my_modules/middle1");
-
-//미들웨어 등록
-app.use(middle1);
-
-app.all("/all",(req,res,next)=>{
-    res.send("all");
-    next();
+app.use(cookieParser()); //등록
+/*
+//("키","값",{속성})
+app.get('/',(req,res)=>{
+    res.cookie("cookie", "chickchock",{
+        maxAge: 30000
+    });
+    res.send("<h1>홈입니다.</h1>");
 });
 
-app.use("/use",(req,res,next)=>{
-    res.send("use");
-    next();
+app.get("/cookie",(req,res)=>{
+    const c1=req.cookies.cookie;
+    console.log(c1);
+    res.send(`<h1>쿠키페이지입니다.</h2>${c1}`)
 });
 
+app.get("/clear", (req,res)=>{
+    res.clearCookie("cookie");
+    res.send(`<h1>쿠키가 삭제되었습니다.</h1>`)
+})
+*/
 
-app.get('/',function(req,res,next){
-    console.log("경로 : ",path.join(__dirname,"html"));
-    res.send('Hello World2');
-    next();
+/*쿠키키 name, 쿠키 값 홍효빈
+/:홈입니다.
+쿠키값이 있으면 => 홍효빈입니다
+없으면 => 로그인되지 않았습니다
+
+/login:쿠키 키값 이름으로 설정
+/logout:쿠키 값 제거*/
+
+app.get('/',(req,res)=>{
+    res.cookie("name", "홍효빈",{
+        maxAge: 30000
+    });
+    res.send("<h1>홈입니다.</h1>");
 });
-app.get('/',function(req,res){
-    console.log("두번째/입니다");
-    res.send('Hello World2')
-});
-// app.get('/home',function(req,res){
-//     console.log("경로 : ",path.join(__dirname,"html"));
-//     res.send('home입니다')
-// });
-
-app.get('/',function(req,res){
-    res.send('apple')
-});
-
-app.get('/banana',function(req,res){
-    res.send('banana')
-});
-
-app.get('/home',function(req,res,next){
-    //애플리케이션 수준의 상태 저장
-    req.app.locals.message='Hello, world~';
-    // res.send(__dirname);
-    // res.sendFile(__dirname+'/home.html');
-    next();
-},(req,res)=>{
-    //응답 수준의 상태 저장
-    res.locals.additionalMessage='swag';
-    //저장된 상태 값 사용
-    const message=`${req.app.locals.message} ${res.locals.additionalMessage}`
-    console.log(message);
-
-    res.sendFile(__dirname+'/home.html');
+app.get("/login",(req,res)=>{
+    res.send(`<h1>홍효빈입니다.</h2>`)
 });
 
-app.get('/grape/:name',function(req,res){
-    // res.send(__dirname);
-    console.log('path', req.path);
-    console.log('params',req.params);
-    console.log('query',req.query);
-    res.send("포도페이지입니다.");
-});
-
+app.get("/logout", (req,res)=>{
+    res.clearCookie("홍효빈");
+    res.send(`<h1>로그인되지 않았습니다.</h1>`)
+})
 app.listen(3000);
