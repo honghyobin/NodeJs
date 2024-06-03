@@ -12,6 +12,9 @@ app.use(cors({
     credentials:true
 }));
 
+app.set('view engine', 'ejs');
+app.set('wiews',__dirname+'/wiews');
+
 //포트 설정 포트번호가 없으면 8080 사용
 app.set('port',process.env.PORT || 8080);
 

@@ -8,7 +8,8 @@ let numOfBoard=1;
 
 //게시글 API
 router.get("/",(req,res)=>{
-    res.send(boardList);
+    res.render('boardList', {"data":boardList});
+    // res.send(boardList);
 });
 router.post("/",(req,res)=>{
     const board={
